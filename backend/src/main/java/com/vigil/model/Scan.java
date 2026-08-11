@@ -21,7 +21,20 @@ public class Scan {
     @Id
     private String id;
     
+    private String userId;
+    
+    // e.g., "URL", "EMAIL", "PDF"
+    private String inputType;
+    
+    // For URL scans, or URLs extracted from emails
     private String url;
+    
+    // For Email scans
+    private String emailSubject;
+    private String emailSender;
+    
+    // For PDF scans
+    private String fileName;
     
     private ThreatScore threatScore;
     

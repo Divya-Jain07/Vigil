@@ -11,7 +11,7 @@ import java.util.Optional;
 @Component
 public class ExcessiveHyphensCheck implements UrlSecurityCheck {
 
-    private static final int MAX_HYPHENS = 3;
+    private static final int MAX_HYPHENS = 2;
 
     @Override
     public Optional<ThreatIndicator> analyze(String url) {
@@ -28,7 +28,7 @@ public class ExcessiveHyphensCheck implements UrlSecurityCheck {
             if (domain != null) {
                 long hyphenCount = domain.chars().filter(ch -> ch == '-').count();
 
-                if (hyphenCount > MAX_HYPHENS) {
+                if (hyphenCount >= MAX_HYPHENS) {
                     return Optional.of(ThreatIndicator.builder()
                             .type("EXCESSIVE_HYPHENS")
                             .severity(Severity.LOW)
