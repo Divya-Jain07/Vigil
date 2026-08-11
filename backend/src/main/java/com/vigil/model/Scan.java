@@ -26,7 +26,9 @@ public class Scan {
     private ThreatScore threatScore;
     
     private List<ThreatIndicator> indicators;
-    
+
+    private String explanation;
+
     private String status;
     
     @CreatedDate

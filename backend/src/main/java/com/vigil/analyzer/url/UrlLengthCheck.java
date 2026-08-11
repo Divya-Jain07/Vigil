@@ -9,7 +9,7 @@ import java.util.Optional;
 @Component
 public class UrlLengthCheck implements UrlSecurityCheck {
 
-    private static final int MAX_LENGTH = 150;
+    private static final int MAX_LENGTH = 75;
 
     @Override
     public Optional<ThreatIndicator> analyze(String url) {

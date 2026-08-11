@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MongoConfig {
 
-    @Value("${spring.data.mongodb.uri}")
+    @Value("${spring.data.mongodb.uri:mongodb://localhost:27017/vigil}")
     private String mongoUri;
 
     @Bean

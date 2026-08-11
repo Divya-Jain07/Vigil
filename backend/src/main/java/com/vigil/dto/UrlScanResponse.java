@@ -21,5 +21,6 @@ public class UrlScanResponse {
         private String severity;
         private List<ThreatIndicator> indicators;
         private String status;
+        private String explanation;
     }
 }
