@@ -5,7 +5,6 @@ import lombok.Data;
 
 import java.util.List;
 import java.util.Map;
-
 @Data
 @Builder
 public class PdfParseResult {
@@ -14,4 +13,5 @@ public class PdfParseResult {
     private Map<String, String> metadata;
     private int pageCount;
     private String fileName;
+    private List<PdfExtractedLink> extractedLinks;
 }

@@ -24,7 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
+import java.util.HexFormat;
 import java.util.List;
 
 @Slf4j
@@ -40,23 +43,36 @@ public class PdfScanController {
     private final ScanRepository scanRepository;
     private final UserRepository userRepository;
 
-    @PostMapping(value = "/pdf", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<UrlScanResponse> scanPdf(@RequestParam("file") MultipartFile file) {
-        if (file.isEmpty()) {
-            return buildErrorResponse("File is empty", HttpStatus.BAD_REQUEST);
-        }
+    private static final long MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
 
-        if (!"application/pdf".equals(file.getContentType())) {
-            return buildErrorResponse("File must be a PDF", HttpStatus.BAD_REQUEST);
-        }
+
+    @PostMapping(value = "/pdf", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+public ResponseEntity<UrlScanResponse> scanPdf(@RequestParam("file") MultipartFile file) {
+    if (file.isEmpty()) {
+        return buildErrorResponse("File is empty", HttpStatus.BAD_REQUEST);
+    }
+
+    if (!"application/pdf".equals(file.getContentType())) {
+        return buildErrorResponse("File must be a PDF", HttpStatus.BAD_REQUEST);
+    }
+
+    if (file.getSize() > MAX_FILE_SIZE_BYTES) {
+        return buildErrorResponse(
+            "File exceeds the maximum allowed size of " + (MAX_FILE_SIZE_BYTES / (1024 * 1024)) + " MB",
+            HttpStatus.PAYLOAD_TOO_LARGE);
+    }
 
         try {
             // Step 1: Parse PDF
             log.info("Parsing uploaded PDF: {}", file.getOriginalFilename());
+            byte[] fileBytes = file.getBytes();
             PdfParseResult parseResult = pdfParser.parse(file.getInputStream(), file.getOriginalFilename());
 
-            // Step 2: Run Analysis
-            List<ThreatIndicator> indicators = pdfAnalysisService.analyzePdf(parseResult);
+            // Compute SHA-256 hash for VirusTotal file lookup
+            String fileHash = computeSha256(fileBytes);
+
+            // Step 2: Run Analysis (includes VirusTotal file hash check)
+            List<ThreatIndicator> indicators = pdfAnalysisService.analyzePdf(parseResult, fileHash);
 
             // Step 3: Calculate threat score
             ThreatScore score = threatScoringService.calculateScore(indicators);
@@ -122,5 +138,16 @@ public class PdfScanController {
                         .build())
                 .build();
         return ResponseEntity.status(status).body(response);
+    }
+
+    private String computeSha256(byte[] data) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hashBytes = digest.digest(data);
+            return HexFormat.of().formatHex(hashBytes);
+        } catch (NoSuchAlgorithmException e) {
+            log.error("SHA-256 algorithm not found", e);
+            return null;
+        }
     }
 }

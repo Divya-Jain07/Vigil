@@ -2,6 +2,7 @@ package com.vigil.service;
 
 import com.vigil.analyzer.pdf.PdfParseResult;
 import com.vigil.analyzer.pdf.PdfSecurityCheck;
+import com.vigil.client.virustotal.VirusTotalClient;
 import com.vigil.model.ThreatIndicator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +19,9 @@ public class PdfAnalysisService {
 
     private final List<PdfSecurityCheck> pdfSecurityChecks;
     private final UrlAnalysisService urlAnalysisService;
+    private final VirusTotalClient virusTotalClient;
 
-    public List<ThreatIndicator> analyzePdf(PdfParseResult result) {
+    public List<ThreatIndicator> analyzePdf(PdfParseResult result, String fileHash) {
         List<ThreatIndicator> indicators = new ArrayList<>();
 
         // Phase 1: Local PDF checks
@@ -50,6 +52,14 @@ public class PdfAnalysisService {
             }
         }
 
+        // Phase 3: VirusTotal file hash lookup
+        if (fileHash != null && !fileHash.isBlank()) {
+            log.info("Running VirusTotal file hash check for PDF: {}", result.getFileName());
+            virusTotalClient.analyzeFileHash(fileHash, result.getFileName())
+                    .ifPresent(indicators::add);
+        }
+
         return indicators;
     }
 }
+

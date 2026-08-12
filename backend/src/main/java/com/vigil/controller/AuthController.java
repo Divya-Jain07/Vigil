@@ -2,15 +2,14 @@ package com.vigil.controller;
 
 import com.vigil.dto.AuthRequest;
 import com.vigil.dto.AuthResponse;
+import com.vigil.dto.ChangePasswordRequest;
 import com.vigil.dto.RegisterRequest;
 import com.vigil.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -43,4 +42,25 @@ public class AuthController {
                     .build());
         }
     }
+
+    @PutMapping("/change-password")
+    public ResponseEntity<AuthResponse> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (!(principal instanceof org.springframework.security.core.userdetails.User)) {
+            return ResponseEntity.status(401).body(AuthResponse.builder()
+                    .success(false)
+                    .message("You must be logged in to change your password")
+                    .build());
+        }
+
+        String email = ((org.springframework.security.core.userdetails.User) principal).getUsername();
+        AuthResponse response = authService.changePassword(email, request.getCurrentPassword(), request.getNewPassword());
+
+        if (response.isSuccess()) {
+            return ResponseEntity.ok(response);
+        }
+        return ResponseEntity.badRequest().body(response);
+    }
 }
+

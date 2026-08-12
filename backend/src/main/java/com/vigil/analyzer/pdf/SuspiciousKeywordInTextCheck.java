@@ -13,7 +13,12 @@ public class SuspiciousKeywordInTextCheck implements PdfSecurityCheck {
     private static final List<String> SUSPICIOUS_PHRASES = List.of(
             "click here", "enter your password", "account suspended",
             "verify your account", "update your billing", "secure your account",
-            "immediate action required", "wire transfer", "confidential invoice"
+            "immediate action required", "wire transfer", "confidential invoice",
+        "act now", "within 24 hours", "verify your identity",
+        "avoid permanent", "failure to act", "account will be suspended",
+        "account will be locked", "confirm your password", "expire",
+        "click the link below", "unusual activity","enable content", "enable macros", "enable editing",
+        "this document is protected", "protected document"
     );
 
     @Override

@@ -71,4 +71,32 @@ public class AuthService {
                 .message("Invalid credentials")
                 .build();
     }
+
+    public AuthResponse changePassword(String email, String currentPassword, String newPassword) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+
+        if (userOptional.isEmpty()) {
+            return AuthResponse.builder()
+                    .success(false)
+                    .message("User not found")
+                    .build();
+        }
+
+        User user = userOptional.get();
+
+        if (!passwordEncoder.matches(currentPassword, user.getPasswordHash())) {
+            return AuthResponse.builder()
+                    .success(false)
+                    .message("Current password is incorrect")
+                    .build();
+        }
+
+        user.setPasswordHash(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        return AuthResponse.builder()
+                .success(true)
+                .message("Password changed successfully")
+                .build();
+    }
 }

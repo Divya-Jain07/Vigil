@@ -44,6 +44,22 @@ public class Scan {
 
     private String status;
     
+    public String getInputType() {
+        if (inputType != null) {
+            return inputType;
+        }
+        if (fileName != null) {
+            return "PDF";
+        }
+        if (emailSubject != null || emailSender != null) {
+            return "EMAIL";
+        }
+        if (url != null) {
+            return "URL";
+        }
+        return "UNKNOWN";
+    }
+    
     @CreatedDate
     private LocalDateTime createdAt;
 }
