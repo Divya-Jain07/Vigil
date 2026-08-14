@@ -132,6 +132,20 @@ const ScanResults = () => {
     recommendedAction = 'This target appears safe, but always remain vigilant and verify unexpected requests.';
   }
 
+  let finalSummary = scan.explanation || 'No summary available for this scan.';
+  let finalWhy = derivedWhy;
+  let finalAction = recommendedAction;
+
+  if (scan.explanation) {
+    const summaryMatch = scan.explanation.match(/SUMMARY:\s*(.*?)(?=\s*WHY:|$)/is);
+    const whyMatch = scan.explanation.match(/WHY:\s*(.*?)(?=\s*ACTION:|$)/is);
+    const actionMatch = scan.explanation.match(/ACTION:\s*(.*)/is);
+
+    if (summaryMatch) finalSummary = summaryMatch[1].trim();
+    if (whyMatch) finalWhy = whyMatch[1].trim();
+    if (actionMatch) finalAction = actionMatch[1].trim();
+  }
+
   // Theming based on severity
   const getSeverityStyles = (sev) => {
     if (sev === 'CRITICAL' || sev === 'HIGH') return { color: 'var(--color-risk)', bg: 'rgba(231,109,140,0.1)' };
@@ -165,7 +179,7 @@ const ScanResults = () => {
   return (
     <div className="dashboard-layout">
       <Navbar />
-      <main className="scan-results-main container">
+      <main className="scan-results-main">
         
         {/* Header Section */}
         <div className="sr-header-top">
@@ -175,20 +189,13 @@ const ScanResults = () => {
         </div>
 
         <div className="sr-title-section">
-          <div className="sr-status-badge">
-            <CheckCircle size={16} /> ANALYSIS COMPLETE
-          </div>
-          <h1>{getTargetTitle()}</h1>
+          <h1>Analysis Results</h1>
           
-          <div className="sr-meta-row">
-            <div className="sr-meta-left">
-              <span className="sr-id">Scan ID: {id}</span>
-              <button onClick={copyToClipboard} className="sr-copy-btn" title="Copy ID">
-                {copied ? <CheckCircle size={14} color="var(--color-safe)" /> : <Copy size={14} />}
-              </button>
-              <span className="sr-divider">|</span>
-              <span className="sr-status-tag">Status: <span className="status-completed">COMPLETED</span></span>
+          <div className="target-and-meta">
+            <div className="target-display">
+              {getTargetTitle()}
             </div>
+            
             <div className="sr-meta-right">
               <span className="sr-timestamp">
                 <Search size={14} /> Scanned at: {formattedDate} &middot; {formattedTime}
@@ -258,20 +265,15 @@ const ScanResults = () => {
                               </span>
                               <span className="finding-type">{ind.type}</span>
                             </div>
-                            <span className="finding-score-mobile" style={{ color: indStyle.color }}>+{ind.score || 0}</span>
                           </div>
                           
                           <div className="finding-actions">
-                            <span className="finding-score" style={{ color: indStyle.color }}>+{ind.score || 0}</span>
                             <ChevronDown size={18} className={`expand-icon ${isExpanded ? 'rotated' : ''}`} />
                           </div>
                         </div>
                         
                         <div className="finding-body">
                           <p>{ind.message || ind.description}</p>
-                          <div className="finding-source">
-                            Source: {ind.source || 'Vigil Local Engine'}
-                          </div>
                         </div>
                       </div>
                     );
@@ -303,7 +305,7 @@ const ScanResults = () => {
                   </div>
                   <div className="assessment-content">
                     <h4>Summary</h4>
-                    <p>{scan.explanation || 'No summary available for this scan.'}</p>
+                    <p>{finalSummary}</p>
                   </div>
                 </div>
 
@@ -313,7 +315,7 @@ const ScanResults = () => {
                   </div>
                   <div className="assessment-content">
                     <h4>Why?</h4>
-                    <p>{derivedWhy}</p>
+                    <p>{finalWhy}</p>
                   </div>
                 </div>
 
@@ -323,7 +325,7 @@ const ScanResults = () => {
                   </div>
                   <div className="assessment-content">
                     <h4>Recommended Action</h4>
-                    <p>{recommendedAction}</p>
+                    <p>{finalAction}</p>
                   </div>
                 </div>
               </div>
@@ -339,10 +341,6 @@ const ScanResults = () => {
                 <div className="detail-row">
                   <div className="detail-label"><FileText size={16} /> Type</div>
                   <div className="detail-value">{targetType} Target</div>
-                </div>
-                <div className="detail-row">
-                  <div className="detail-label"><CheckCircle size={16} /> Status</div>
-                  <div className="detail-value"><span className="status-completed-badge">COMPLETED</span></div>
                 </div>
                 <div className="detail-row">
                   <div className="detail-label"><Search size={16} /> Scan Time</div>

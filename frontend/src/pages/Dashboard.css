@@ -1,5 +1,6 @@
 .dashboard-header {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
 }
 
 .dashboard-header h1 {
@@ -16,7 +17,9 @@
 
 .dashboard-grid {
   display: grid;
-  grid-template-columns: 1fr 340px;
+  grid-template-columns: 1fr;
+  max-width: 800px;
+  margin: 0 auto;
   gap: 2rem;
   align-items: start;
 }

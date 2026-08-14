@@ -8,6 +8,8 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
 
   useEffect(() => {
     // Check if token and user data exist in local storage on mount
@@ -88,7 +90,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+    <AuthContext.Provider value={{ 
+      user, login, register, logout, loading,
+      showLoginModal, setShowLoginModal,
+      showRegisterModal, setShowRegisterModal
+    }}>
       {!loading && children}
     </AuthContext.Provider>
   );

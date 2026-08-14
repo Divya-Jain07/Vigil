@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { ShieldAlert, ArrowRight, Loader2 } from 'lucide-react';
+import { ShieldAlert, ArrowRight, Loader2, X } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import './Auth.css';
 
@@ -9,8 +8,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { login } = useAuth();
-  const navigate = useNavigate();
+  const { login, showLoginModal, setShowLoginModal, setShowRegisterModal } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,20 +17,30 @@ const Login = () => {
 
     const result = await login(email, password);
     if (result.success) {
-      navigate('/');
+      setShowLoginModal(false);
     } else {
       setError(result.message);
       setIsSubmitting(false);
     }
   };
 
+  const handleSwitchToRegister = (e) => {
+    e.preventDefault();
+    setShowLoginModal(false);
+    setShowRegisterModal(true);
+  };
+
+  if (!showLoginModal) return null;
+
   return (
-    <div className="auth-page">
-      <div className="auth-container">
-        <Link to="/" className="auth-logo">
-          <ShieldAlert size={32} className="logo-icon" />
-          <span>VIGIL</span>
-        </Link>
+    <div className="auth-page" onClick={() => setShowLoginModal(false)}>
+      <div className="auth-container" onClick={e => e.stopPropagation()} style={{ position: 'relative' }}>
+        <button 
+          onClick={() => setShowLoginModal(false)}
+          style={{ position: 'absolute', top: '-1rem', right: '-1rem', background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '50%', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10, color: 'var(--color-text-secondary)' }}
+        >
+          <X size={20} />
+        </button>
         
         <div className="auth-card">
           <h2>Welcome back</h2>
@@ -72,7 +80,7 @@ const Login = () => {
           </form>
 
           <div className="auth-footer">
-            Don't have an account? <Link to="/register">Sign up</Link>
+            Don't have an account? <a href="#" onClick={handleSwitchToRegister}>Sign up</a>
           </div>
         </div>
       </div>

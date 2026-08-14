@@ -1,19 +1,29 @@
-import React from 'react';
-import { Sun, ChevronDown, ShieldAlert } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Sun, Moon, ChevronDown } from 'lucide-react';
 import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './Navbar.css';
 
 const Navbar = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, setShowLoginModal, setShowRegisterModal } = useAuth();
+  const [theme, setTheme] = useState(localStorage.getItem('vigil_theme') || 'light');
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('vigil_theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  };
 
   return (
     <nav className="navbar">
       <div className="navbar-container container">
         <div className="navbar-left">
           <Link to="/" className="navbar-logo">
-            <ShieldAlert className="logo-icon" size={28} />
-            <span className="logo-text">VIGIL</span>
+            <img src="/image.png" alt="Vigil Logo" className="logo-img logo-light" />
+            <img src="/dark.png" alt="Vigil Logo" className="logo-img logo-dark" />
           </Link>
           <div className="navbar-links">
             <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Dashboard</NavLink>
@@ -22,8 +32,8 @@ const Navbar = () => {
           </div>
         </div>
         <div className="navbar-right">
-          <button className="icon-button">
-            <Sun size={20} />
+          <button className="icon-button" onClick={toggleTheme} title="Toggle dark mode">
+            {theme === 'light' ? <Sun size={20} /> : <Moon size={20} />}
           </button>
           {user ? (
             <NavLink to="/profile" className="user-profile" title="View Profile & Settings" style={{ textDecoration: 'none' }}>
@@ -34,8 +44,8 @@ const Navbar = () => {
             </NavLink>
           ) : (
             <div className="auth-buttons">
-              <Link to="/login" className="btn-nav-login">Log in</Link>
-              <Link to="/register" className="btn-nav-signup">Sign up</Link>
+              <button onClick={() => setShowLoginModal(true)} className="btn-nav-login">Log in</button>
+              <button onClick={() => setShowRegisterModal(true)} className="btn-nav-signup">Sign up</button>
             </div>
           )}
         </div>

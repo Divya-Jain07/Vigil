@@ -1,6 +1,7 @@
 .scan-results-main {
-  padding: 2rem 1rem;
-  max-width: 1200px;
+  padding: 1rem 2rem;
+  max-width: 1600px;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -29,7 +30,7 @@
 }
 
 .sr-title-section {
-  margin-bottom: 2.5rem;
+  margin-bottom: 1rem;
 }
 
 .sr-status-badge {
@@ -51,8 +52,24 @@
   font-size: 2.5rem;
   font-weight: 800;
   color: var(--color-text-main);
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   letter-spacing: -0.5px;
+}
+
+.target-and-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.target-display {
+  color: var(--color-text-secondary);
+  font-family: monospace;
+  font-size: 1.1rem;
+  word-break: break-all;
 }
 
 .sr-meta-row {
@@ -130,13 +147,13 @@
 .sr-grid {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .sr-col-left, .sr-col-right {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 0.75rem;
 }
 
 .sr-card {
@@ -155,8 +172,8 @@
 
 .score-card-content {
   display: flex;
-  padding: 2.5rem;
-  gap: 2.5rem;
+  padding: 1rem;
+  gap: 1rem;
   align-items: center;
 }
 
@@ -165,8 +182,8 @@
 }
 
 .score-donut {
-  width: 160px;
-  height: 160px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   background: conic-gradient(var(--color) calc(var(--score) * 1%), var(--color-neutral-light) 0);
   display: flex;
@@ -178,8 +195,8 @@
 .score-donut::before {
   content: "";
   position: absolute;
-  width: 140px;
-  height: 140px;
+  width: 100px;
+  height: 100px;
   background-color: var(--color-surface);
   border-radius: 50%;
 }
@@ -193,13 +210,13 @@
 }
 
 .donut-value {
-  font-size: 3rem;
+  font-size: 2.25rem;
   font-weight: 800;
   line-height: 1;
 }
 
 .donut-max {
-  font-size: 1rem;
+  font-size: 0.85rem;
   color: var(--color-text-secondary);
   font-weight: 500;
 }
@@ -223,7 +240,7 @@
 }
 
 .score-details h2 {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--color-text-main);
   margin: 0;
@@ -231,14 +248,14 @@
 
 .score-details p {
   color: var(--color-text-secondary);
-  font-size: 0.95rem;
-  line-height: 1.5;
+  font-size: 0.85rem;
+  line-height: 1.4;
   margin: 0;
 }
 
 .score-card-footer {
   border-top: 1px solid var(--color-border);
-  padding: 1rem 2.5rem;
+  padding: 0.75rem 1.5rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -252,14 +269,14 @@
 
 /* Findings Card */
 .findings-card {
-  padding: 2rem;
+  padding: 1rem;
 }
 
 .findings-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   flex-wrap: wrap;
   gap: 1rem;
 }
@@ -319,9 +336,9 @@
 .finding-header {
   display: flex;
   align-items: center;
-  padding: 1.2rem;
+  padding: 0.75rem 1rem;
   cursor: pointer;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .finding-icon {
@@ -401,25 +418,16 @@
   margin-bottom: 1rem;
 }
 
-.finding-source {
-  display: inline-block;
-  background-color: var(--color-neutral-light);
-  color: var(--color-text-secondary);
-  font-size: 0.75rem;
-  padding: 0.2rem 0.6rem;
-  border-radius: 4px;
-}
-
 /* Assessment Card */
 .assessment-card {
-  padding: 2rem;
+  padding: 1rem;
 }
 
 .card-header-with-icon {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .card-header-with-icon h3 {
@@ -432,13 +440,13 @@
 .assessment-sections {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .assessment-item {
   display: flex;
   gap: 1rem;
-  padding-bottom: 1.5rem;
+  padding-bottom: 1rem;
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -474,7 +482,7 @@
 
 /* Details Card */
 .details-card {
-  padding: 2rem;
+  padding: 1rem;
 }
 
 .details-list {
@@ -486,7 +494,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 0;
+  padding: 0.75rem 0;
   border-bottom: 1px dashed var(--color-border);
 }
 

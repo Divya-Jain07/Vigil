@@ -16,13 +16,13 @@ function App() {
         <div className="app">
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/scan/:id" element={<ScanResults />} />
             <Route path="/history" element={<History />} />
             <Route path="/about" element={<About />} />
           </Routes>
+          <Login />
+          <Register />
         </div>
       </Router>
     </AuthProvider>
