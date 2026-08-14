@@ -1,28 +1,31 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Layout from './components/common/Layout';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
-import Analysis from './pages/Analysis';
+import ScanResults from './pages/ScanResults';
 import History from './pages/History';
-import Login from './pages/Login';
+import About from './pages/About';
+import Login from './pages/auth/Login';
+import Register from './pages/auth/Register';
+import Profile from './pages/auth/Profile';
+import { AuthProvider } from './context/AuthContext';
+import './App.css';
 
 function App() {
-  // Simple auth check simulation for now
-  const isAuthenticated = false;
-
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="analysis/:id" element={<Analysis />} />
-          <Route 
-            path="history" 
-            element={isAuthenticated ? <History /> : <Navigate to="/login" replace />} 
-          />
-        </Route>
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <div className="app">
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/scan/:id" element={<ScanResults />} />
+            <Route path="/history" element={<History />} />
+            <Route path="/about" element={<About />} />
+          </Routes>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 

@@ -1,0 +1,114 @@
+.how-it-works {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  height: 100%;
+}
+
+.how-header {
+  margin-bottom: 1rem;
+}
+
+.how-header h2 {
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+  color: var(--color-text-main);
+}
+
+.how-header p {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+.pipeline {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.pipeline-step {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.step-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.step-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #F8EFEA; /* Light primary tint */
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.step-line {
+  width: 2px;
+  height: 16px;
+  border-left: 2px dashed var(--color-border);
+  margin: 4px 0;
+}
+
+.step-content {
+  display: flex;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  flex: 1;
+}
+
+.step-number {
+  font-family: var(--font-family-serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  padding-top: 0.5rem;
+}
+
+.step-text h3 {
+  font-family: var(--font-family-main);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.15rem;
+  padding-top: 0.6rem;
+}
+
+.step-text p {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+}
+
+/* Remove bottom padding for last step */
+.pipeline-step:last-child .step-content {
+  padding-bottom: 0;
+}
+
+.trust-badge {
+  background-color: rgba(146, 211, 191, 0.15); /* Tint of safe color */
+  border-radius: var(--border-radius-md);
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #2F6F59; /* Darker variant of safe color for contrast */
+}
+
+.trust-icon {
+  flex-shrink: 0;
+}
+
+.trust-badge span {
+  font-weight: 500;
+  font-size: 0.95rem;
+  line-height: 1.3;
+}

@@ -1,0 +1,106 @@
+.about-hero {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 4rem;
+  padding: 2rem 0;
+}
+
+.about-hero h1 {
+  font-family: var(--font-family-serif);
+  font-size: 3.5rem;
+  color: var(--color-text-main);
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+}
+
+.about-hero h1 span {
+  color: var(--color-primary);
+  font-style: italic;
+}
+
+.about-hero p {
+  font-size: 1.25rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.about-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.about-icon-wrapper {
+  width: 56px;
+  height: 56px;
+  background-color: #F8EFEA;
+  border-radius: var(--border-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  margin-bottom: 1.5rem;
+}
+
+.about-card h2 {
+  font-family: var(--font-family-serif);
+  font-size: 1.5rem;
+  color: var(--color-text-main);
+  margin-bottom: 1rem;
+}
+
+.about-card p {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.about-mission {
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: var(--border-radius-lg);
+  padding: 4rem;
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto 2rem;
+}
+
+.about-mission h2 {
+  font-family: var(--font-family-serif);
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.about-mission p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+  opacity: 0.95;
+}
+
+.about-mission p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 992px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .about-hero h1 {
+    font-size: 2.5rem;
+  }
+  
+  .about-mission {
+    padding: 3rem 2rem;
+  }
+}
