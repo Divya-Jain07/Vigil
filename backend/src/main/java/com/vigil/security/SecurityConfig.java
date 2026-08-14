@@ -38,6 +38,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/scans/url").permitAll()
                         .requestMatchers("/api/v1/scans/email").permitAll()
                         .requestMatchers("/api/v1/scans/pdf").permitAll() // allow public unauthenticated scans
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/scans/{id}").permitAll() // allow anyone to fetch specific scan details by ID
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -59,7 +60,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:3000"));
+        configuration.setAllowedOriginPatterns(List.of("http://localhost:5173", "http://localhost:3000", "chrome-extension://*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With", "Accept"));
         configuration.setAllowCredentials(true);

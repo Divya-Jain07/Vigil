@@ -25,6 +25,10 @@ const ScanResults = () => {
 
   useEffect(() => {
     if (scan && scan.id === id) {
+      if (user && !scan.userId) {
+        // Automatically claim the anonymous scan if the user views it while logged in
+        api.put(`/scans/${id}/claim`).then(res => setScan(res.data)).catch(console.error);
+      }
       setLoading(false);
       return;
     }
@@ -32,8 +36,20 @@ const ScanResults = () => {
     const fetchScan = async () => {
       try {
         setLoading(true);
-        const response = await api.get(`/scans/${id}`);
-        setScan(response.data);
+        let response = await api.get(`/scans/${id}`);
+        let fetchedScan = response.data;
+
+        // If the user is logged in and the scan is anonymous, claim it for them!
+        if (user && !fetchedScan.userId) {
+          try {
+            const claimResponse = await api.put(`/scans/${id}/claim`);
+            fetchedScan = claimResponse.data;
+          } catch (e) {
+            console.error('Failed to claim scan:', e);
+          }
+        }
+
+        setScan(fetchedScan);
       } catch (err) {
         if (err.response?.status === 401 || err.response?.status === 403) {
           setError('Authentication required to view this past scan. Please log in.');

@@ -19,10 +19,13 @@ export const AuthProvider = ({ children }) => {
     if (token && storedUser) {
       try {
         setUser(JSON.parse(storedUser));
+        window.postMessage({ type: 'VIGIL_AUTH_UPDATE', token: token }, '*');
       } catch (e) {
         console.error('Failed to parse user from local storage', e);
         logout();
       }
+    } else {
+      window.postMessage({ type: 'VIGIL_AUTH_UPDATE', token: null }, '*');
     }
     
     setLoading(false);
@@ -48,6 +51,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('vigil_user', JSON.stringify(userData));
         
         setUser(userData);
+        window.postMessage({ type: 'VIGIL_AUTH_UPDATE', token: token }, '*');
         return { success: true };
       }
       return { success: false, message: response.data.message || 'Login failed' };
@@ -71,6 +75,7 @@ export const AuthProvider = ({ children }) => {
            localStorage.setItem('vigil_token', token);
            localStorage.setItem('vigil_user', JSON.stringify(userData));
            setUser(userData);
+           window.postMessage({ type: 'VIGIL_AUTH_UPDATE', token: token }, '*');
         }
         return { success: true };
       }
@@ -87,6 +92,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('vigil_token');
     localStorage.removeItem('vigil_user');
     setUser(null);
+    window.postMessage({ type: 'VIGIL_AUTH_UPDATE', token: null }, '*');
   };
 
   return (

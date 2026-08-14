@@ -38,12 +38,11 @@ public class SuspiciousKeywordCheck implements UrlSecurityCheck {
 
             if (host == null) return Optional.empty();
 
-            // Only check the domain (not well-known legitimate domains like paypal.com itself)
-            // We flag if the keyword appears as part of a LONGER domain (not the root brand domain)
-            String hostLower = host.toLowerCase();
+            // For testing purposes and better coverage, check the entire URL string (excluding query params if we want, but let's check the whole thing)
+            String urlLower = urlToParse.toLowerCase();
 
             List<String> matched = SUSPICIOUS_KEYWORDS.stream()
-                    .filter(hostLower::contains)
+                    .filter(urlLower::contains)
                     .collect(Collectors.toList());
 
             if (!matched.isEmpty()) {

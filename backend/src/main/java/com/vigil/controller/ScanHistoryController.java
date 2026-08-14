@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,6 +36,30 @@ public class ScanHistoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Scan> getScanById(@PathVariable String id) {
+        Optional<Scan> scanOptional = scanRepository.findById(id);
+        
+        if (scanOptional.isPresent()) {
+            Scan scan = scanOptional.get();
+            
+            // If the scan is anonymous, anyone with the ID can view it
+            if (scan.getUserId() == null) {
+                return ResponseEntity.ok(scan);
+            }
+            
+            // If the scan belongs to a user, only that user can view it
+            String userId = getAuthenticatedUserId();
+            if (userId != null && userId.equals(scan.getUserId())) {
+                return ResponseEntity.ok(scan);
+            } else {
+                return ResponseEntity.status(403).build();
+            }
+        }
+        
+        return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/{id}/claim")
+    public ResponseEntity<Scan> claimScan(@PathVariable String id) {
         String userId = getAuthenticatedUserId();
         if (userId == null) {
             return ResponseEntity.status(401).build();
@@ -44,8 +69,11 @@ public class ScanHistoryController {
         
         if (scanOptional.isPresent()) {
             Scan scan = scanOptional.get();
-            // Ensure the authenticated user actually owns this scan
-            if (userId.equals(scan.getUserId())) {
+            if (scan.getUserId() == null) {
+                scan.setUserId(userId);
+                scanRepository.save(scan);
+                return ResponseEntity.ok(scan);
+            } else if (userId.equals(scan.getUserId())) {
                 return ResponseEntity.ok(scan);
             } else {
                 return ResponseEntity.status(403).build();
