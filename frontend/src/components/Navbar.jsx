@@ -1,20 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import { Sun, Moon, ChevronDown } from 'lucide-react';
-import { Link, NavLink } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { Sun, Moon, ChevronDown, LogOut, User } from 'lucide-react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './Navbar.css';
 
 const Navbar = () => {
   const { user, logout, setShowLoginModal, setShowRegisterModal } = useAuth();
   const [theme, setTheme] = useState(localStorage.getItem('vigil_theme') || 'light');
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('vigil_theme', theme);
   }, [theme]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   const toggleTheme = () => {
     setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  };
+
+  const handleLogout = () => {
+    logout();
+    setShowDropdown(false);
+    navigate('/');
   };
 
   return (
@@ -36,12 +55,59 @@ const Navbar = () => {
             {theme === 'light' ? <Sun size={20} /> : <Moon size={20} />}
           </button>
           {user ? (
-            <NavLink to="/profile" className="user-profile" title="View Profile & Settings" style={{ textDecoration: 'none' }}>
-              <div className="avatar">
-                {user.name ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'U'}
-              </div>
-              <span className="user-name">{user.name}</span>
-            </NavLink>
+            <div className="user-profile-container" ref={dropdownRef} style={{ position: 'relative' }}>
+              <button 
+                className="user-profile" 
+                onClick={() => setShowDropdown(!showDropdown)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontFamily: 'inherit' }}
+              >
+                <div className="avatar">
+                  {user.name ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'U'}
+                </div>
+                <span className="user-name" style={{ color: 'var(--color-text-main)', fontWeight: 500 }}>{user.name}</span>
+                <ChevronDown size={16} style={{ color: 'var(--color-text-secondary)' }} />
+              </button>
+              
+              {showDropdown && (
+                <div className="profile-dropdown" style={{
+                  position: 'absolute',
+                  top: '100%',
+                  right: 0,
+                  marginTop: '0.5rem',
+                  background: 'var(--color-surface)',
+                  border: '1px solid var(--color-border)',
+                  borderRadius: 'var(--border-radius-md)',
+                  boxShadow: 'var(--shadow-md)',
+                  minWidth: '160px',
+                  zIndex: 100,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  overflow: 'hidden'
+                }}>
+                  <button 
+                    onClick={handleLogout}
+                    style={{ 
+                      padding: '0.75rem 1rem', 
+                      color: 'var(--color-risk)', 
+                      background: 'none', 
+                      border: 'none', 
+                      cursor: 'pointer', 
+                      textAlign: 'left', 
+                      fontSize: '0.9rem', 
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      fontFamily: 'inherit'
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--color-neutral-light)'}
+                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                  >
+                    <LogOut size={16} /> Log out
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
             <div className="auth-buttons">
               <button onClick={() => setShowLoginModal(true)} className="btn-nav-login">Log in</button>

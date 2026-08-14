@@ -8,13 +8,18 @@ import { useAuth } from '../context/AuthContext';
 import './History.css';
 
 const History = () => {
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, setShowLoginModal, setShowRegisterModal } = useAuth();
   const [scans, setScans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (authLoading || !user) return;
+    if (authLoading) return;
+
+    if (!user) {
+      setLoading(false);
+      return;
+    }
 
     const fetchHistory = async () => {
       try {
@@ -67,8 +72,8 @@ const History = () => {
             <h2>Login Required</h2>
             <p>Your scan history is tied to your account for privacy. Log in or create a free account to view and save your past security scans.</p>
             <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem', justifyContent: 'center' }}>
-              <Link to="/login" className="btn-primary-outline">Log in</Link>
-              <Link to="/register" className="btn-primary">Create Account</Link>
+              <button onClick={() => setShowLoginModal(true)} className="btn-primary-outline">Log in</button>
+              <button onClick={() => setShowRegisterModal(true)} className="btn-primary">Create Account</button>
             </div>
           </div>
         ) : error ? (
