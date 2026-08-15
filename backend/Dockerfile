@@ -16,7 +16,7 @@ COPY src src
 RUN ./mvnw package -DskipTests
 
 # Stage 2: Create a lightweight runtime image
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:25-jre-alpine
 WORKDIR /app
 
 # Copy the built jar from the build stage
