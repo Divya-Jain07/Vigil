@@ -70,7 +70,15 @@ const VerificationPanel = () => {
         // PDF uses multipart/form-data
         const formData = new FormData();
         formData.append('file', file);
-        response = await axios.post('http://localhost:8080/api/v1/scans/pdf', formData, { headers });
+        
+        // Pass multipart/form-data headers so api.js doesn't use application/json
+        const config = {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            ...headers
+          }
+        };
+        response = await api.post('/scans/pdf', formData, config);
       }
       
       if (response.data.success) {
