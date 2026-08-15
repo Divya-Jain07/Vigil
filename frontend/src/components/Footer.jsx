@@ -40,8 +40,8 @@ const Footer = () => {
               {isOnline ? 'Online' : 'Degraded'}
             </div> */}
             <a href="#" className="footer-link"><BookOpen size={16} /> Documentation</a>
-            <button className="footer-link" onClick={() => setShowHowItWorks(true)} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: 'inherit', color: 'inherit' }}><ShieldAlert size={16} /> How Vigil works</button>
-            <a href="#" className="footer-link"><Code size={16} /> GitHub</a>
+            <button className="footer-link" onClick={() => setShowHowItWorks(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: 'inherit' }}><ShieldAlert size={16} /> How Vigil works</button>
+            <a href="https://github.com/Divya-Jain07/Vigil" target='_blank' className="footer-link"><Code size={16} /> GitHub</a>
             {/* <a href="#" className="footer-link"><Mail size={16} /> Contact</a> */}
           </div>
 

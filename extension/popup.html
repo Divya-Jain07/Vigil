@@ -6,13 +6,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vigil Status</title>
   <style>
+    :root {
+      --color-primary: #87452D;
+      --color-primary-hover: #6a3522;
+      --color-background: #FFFEF1;
+      --color-surface: #FFFFFF;
+      --color-safe: #92D3BF;
+      --color-risk: #E76D8C;
+      --color-warning: #f5a623;
+      --color-text-main: #1C1C1C;
+      --color-text-secondary: #5F5F5F;
+      --color-border: #E8E8E8;
+      --color-border-focus: #87452D;
+      --color-neutral-light: #F8F8F8;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-primary: #a35d41;
+        --color-primary-hover: #c47657;
+        --color-background: #121212;
+        --color-surface: #1E1E1E;
+        --color-safe: #6fb2a0;
+        --color-risk: #c45672;
+        --color-warning: #e09b23;
+        --color-text-main: #F5F5F5;
+        --color-text-secondary: #A0A0A0;
+        --color-border: #333333;
+        --color-border-focus: #a35d41;
+        --color-neutral-light: #2A2A2A;
+      }
+    }
+
     body {
       width: 320px;
       margin: 0;
       padding: 20px;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: #0f172a;
-      color: #f8fafc;
+      background-color: var(--color-background);
+      color: var(--color-text-main);
     }
 
     .header {
@@ -32,14 +64,16 @@
       font-weight: 700;
       margin: 0;
       letter-spacing: -0.5px;
+      font-family: 'Georgia', serif;
     }
 
     .status-card {
-      background-color: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 12px;
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
       padding: 16px;
       margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
 
     .status-header {
@@ -52,22 +86,20 @@
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background-color: #10b981;
-      /* Emerald 500 */
+      background-color: var(--color-primary);
       margin-right: 8px;
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
     }
 
     .status-text {
       font-size: 14px;
       font-weight: 600;
-      color: #e2e8f0;
+      color: var(--color-text-main);
       margin: 0;
     }
 
     .status-desc {
       font-size: 13px;
-      color: #94a3b8;
+      color: var(--color-text-secondary);
       margin: 0;
       line-height: 1.5;
     }
@@ -76,10 +108,10 @@
       display: block;
       width: 100%;
       padding: 12px;
-      background-color: #06b6d4;
+      background-color: var(--color-primary);
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 4px;
       font-size: 14px;
       font-weight: 600;
       text-align: center;
@@ -89,7 +121,84 @@
     }
 
     .action-btn:hover {
-      background-color: #0891b2;
+      background-color: var(--color-primary-hover);
+    }
+
+    .tabs {
+      display: flex;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      color: var(--color-text-secondary);
+      padding: 10px 0;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .tab-btn:hover {
+      color: var(--color-text-main);
+    }
+
+    .tab-btn.active {
+      color: var(--color-primary);
+      border-bottom-color: var(--color-primary);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .scan-form {
+      margin-bottom: 24px;
+    }
+
+    .form-input {
+      width: 100%;
+      box-sizing: border-box;
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      color: var(--color-text-main);
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      font-family: inherit;
+      font-size: 13px;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--color-border-focus);
+    }
+
+    textarea.form-input {
+      resize: vertical;
+    }
+
+    .file-input {
+      padding: 8px;
+    }
+    
+    #result-container {
+      display: none; 
+      background-color: var(--color-surface); 
+      border: 1px solid var(--color-border); 
+      border-radius: 8px; 
+      padding: 16px; 
+      margin-bottom: 24px; 
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
   </style>
 </head>
@@ -100,21 +209,51 @@
     <h1 class="title">Vigil Security</h1>
   </div>
 
-  <div class="status-card">
-    <div class="status-header">
-      <div id="status-dot" class="status-indicator"></div>
-      <h2 id="status-title" class="status-text">Active & Monitoring</h2>
-    </div>
-    <p id="status-desc" class="status-desc">Vigil is analyzing URLs in the background.</p>
+  <div class="tabs">
+    <button class="tab-btn active" data-target="tab-url">URL</button>
+    <button class="tab-btn" data-target="tab-email">Email</button>
+    <button class="tab-btn" data-target="tab-pdf">PDF</button>
   </div>
 
-  <div id="result-container" style="display: none; background-color: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 16px; margin-bottom: 24px; text-align: center;">
+  <div id="tab-url" class="tab-content active">
+    <div class="status-card">
+      <div class="status-header">
+        <div id="status-dot" class="status-indicator"></div>
+        <h2 id="status-title" class="status-text">Active & Monitoring</h2>
+      </div>
+      <p id="status-desc" class="status-desc">Vigil is analyzing URLs in the background.</p>
+    </div>
+  </div>
+
+  <div id="tab-email" class="tab-content">
+    <form id="email-form" class="scan-form">
+      <p style="font-size: 13px; color: #94a3b8; margin-top: 0; margin-bottom: 12px; line-height: 1.4;">
+        Tip: Press <strong>Ctrl+A</strong> and <strong>Ctrl+C</strong> in your email client to copy the entire email, then paste it below.
+      </p>
+      <textarea id="email-body" placeholder="Paste Email Content Here..." required class="form-input" rows="6" style="resize: none;"></textarea>
+      <button type="submit" id="scan-email-btn" class="action-btn">Scan Email</button>
+    </form>
+  </div>
+
+  <div id="tab-pdf" class="tab-content">
+    <form id="pdf-form" class="scan-form">
+      <input type="file" id="pdf-file" accept="application/pdf" required class="form-input file-input">
+      <button type="submit" id="scan-pdf-btn" class="action-btn">Scan PDF</button>
+    </form>
+  </div>
+
+  <div id="loading-container" style="display: none; text-align: center; margin-bottom: 24px;">
+    <p style="color: var(--color-text-secondary); font-size: 14px;">Analyzing... Please wait.</p>
+  </div>
+
+  <div id="result-container">
     <div id="result-score" style="font-size: 32px; font-weight: 800; margin-bottom: 4px;">--/100</div>
     <div id="result-severity" style="font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;">UNKNOWN</div>
     <a href="#" id="view-report-btn" class="action-btn" style="display: none; margin-top: 12px;">View Full Report</a>
   </div>
 
-  <a href="http://localhost:5173" target="_blank" id="dashboard-link" class="action-btn" style="background-color: transparent; border: 1px solid #334155; color: #cbd5e1;">Open Dashboard</a>
+  <a href="http://localhost:5173" target="_blank" id="dashboard-link" class="action-btn" style="background-color: transparent; border: 1px solid var(--color-border); color: var(--color-text-secondary);">Open Dashboard</a>
+
 
   <script type="module" src="popup.js"></script>
 </body>

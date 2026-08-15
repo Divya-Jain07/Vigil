@@ -33,7 +33,12 @@
 .tab-btn.active {
   color: var(--color-primary);
   border-bottom-color: var(--color-primary);
-  background-color: white;
+  background-color: var(--color-surface);
+}
+
+:root[data-theme="dark"] .tab-btn.active {
+  background-color: var(--color-primary);
+  color: white;
 }
 
 .panel-content {

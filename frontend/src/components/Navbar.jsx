@@ -84,6 +84,25 @@ const Navbar = () => {
                   flexDirection: 'column',
                   overflow: 'hidden'
                 }}>
+                  <Link 
+                    to="/profile"
+                    onClick={() => setShowDropdown(false)}
+                    style={{ 
+                      padding: '0.75rem 1rem', 
+                      color: 'var(--color-text-main)', 
+                      textDecoration: 'none',
+                      fontSize: '0.9rem', 
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      borderBottom: '1px solid var(--color-border)'
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--color-neutral-light)'}
+                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                  >
+                    <User size={16} /> Profile & Settings
+                  </Link>
                   <button 
                     onClick={handleLogout}
                     style={{ 

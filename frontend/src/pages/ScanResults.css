@@ -37,7 +37,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: #E8F5E9;
+  background-color: rgba(46, 125, 50, 0.15);
   color: #2E7D32;
   padding: 0.4rem 0.8rem;
   border-radius: 20px;
@@ -122,7 +122,7 @@
 .status-completed {
   color: #2E7D32;
   font-weight: 600;
-  background-color: #E8F5E9;
+  background-color: rgba(46, 125, 50, 0.15);
   padding: 0.2rem 0.6rem;
   border-radius: 12px;
   font-size: 0.8rem;
@@ -131,7 +131,7 @@
 .status-completed-badge {
   color: #2E7D32;
   font-weight: 600;
-  background-color: #E8F5E9;
+  background-color: rgba(46, 125, 50, 0.15);
   padding: 0.4rem 1rem;
   border-radius: 20px;
   font-size: 0.85rem;
@@ -260,7 +260,7 @@
   align-items: center;
   gap: 0.5rem;
   color: var(--color-text-main);
-  background-color: #FAFAFA;
+  background-color: var(--color-neutral-light);
 }
 
 .score-card-footer strong {
@@ -459,7 +459,7 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background-color: #FFF3E0;
+  background-color: rgba(230, 81, 0, 0.15);
   color: #E65100;
   display: flex;
   align-items: center;
