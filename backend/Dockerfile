@@ -1,5 +1,5 @@
 # Stage 1: Build the application using Maven
-FROM eclipse-temurin:21-jdk-alpine AS build
+FROM eclipse-temurin:25-jdk-alpine AS build
 WORKDIR /app
 
 # Copy the Maven wrapper and pom.xml
