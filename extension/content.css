@@ -10,7 +10,7 @@
   align-items: center;
   justify-content: center;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  color: #f8fafc;
+  color: #F5F5F5;
 }
 
 #vigil-warning-overlay * {
@@ -23,21 +23,21 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(15, 23, 42, 0.85); /* Slate 900 with opacity */
+  background-color: rgba(18, 18, 18, 0.85); /* Vigil Background Dark with opacity */
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
 
 .vigil-overlay-content {
   position: relative;
-  background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
-  border: 1px solid rgba(226, 232, 240, 0.1);
+  background: #1E1E1E; /* Vigil Surface Dark */
+  border: 1px solid #333333; /* Vigil Border Dark */
   border-radius: 16px;
   padding: 40px;
   max-width: 500px;
   width: 90%;
   text-align: center;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(6, 182, 212, 0.1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(163, 93, 65, 0.1);
   animation: vigil-slide-up 0.4s ease-out forwards;
 }
 
@@ -56,19 +56,19 @@
   width: 64px;
   height: 64px;
   margin: 0 auto 20px;
-  color: #ef4444; /* Red 500 */
+  color: #c45672; /* Vigil Risk Dark */
 }
 
 .vigil-warning-title {
   font-size: 24px;
   font-weight: 700;
   margin: 0 0 10px;
-  color: #f8fafc;
+  color: #F5F5F5; /* Vigil Text Main Dark */
 }
 
 .vigil-warning-subtitle {
   font-size: 16px;
-  color: #94a3b8; /* Slate 400 */
+  color: #A0A0A0; /* Vigil Text Secondary Dark */
   margin: 0 0 24px;
   line-height: 1.5;
 }
@@ -79,18 +79,18 @@
   align-items: center;
   padding: 16px 32px;
   border-radius: 12px;
-  background-color: rgba(15, 23, 42, 0.5);
+  background-color: #2A2A2A; /* Vigil Neutral Light Dark */
   margin-bottom: 24px;
 }
 
 .vigil-risk-score.high {
-  border: 1px solid rgba(249, 115, 22, 0.3); /* Orange */
-  box-shadow: 0 0 20px rgba(249, 115, 22, 0.1);
+  border: 1px solid rgba(224, 155, 35, 0.3); /* Vigil Warning Dark */
+  box-shadow: 0 0 20px rgba(224, 155, 35, 0.1);
 }
 
 .vigil-risk-score.critical {
-  border: 1px solid rgba(239, 68, 68, 0.3); /* Red */
-  box-shadow: 0 0 20px rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(196, 86, 114, 0.3); /* Vigil Risk Dark */
+  box-shadow: 0 0 20px rgba(196, 86, 114, 0.1);
 }
 
 .vigil-risk-score .score {
@@ -99,19 +99,19 @@
   margin-bottom: 4px;
 }
 
-.vigil-risk-score.high .score { color: #f97316; }
-.vigil-risk-score.critical .score { color: #ef4444; }
+.vigil-risk-score.high .score { color: #e09b23; } /* Vigil Warning Dark */
+.vigil-risk-score.critical .score { color: #c45672; } /* Vigil Risk Dark */
 
 .vigil-risk-score .severity {
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 1px;
-  color: #cbd5e1;
+  color: #A0A0A0; /* Vigil Text Secondary Dark */
 }
 
 .vigil-indicators {
   text-align: left;
-  background-color: rgba(15, 23, 42, 0.4);
+  background-color: #2A2A2A; /* Vigil Neutral Light Dark */
   padding: 16px;
   border-radius: 8px;
   margin-bottom: 32px;
@@ -120,7 +120,7 @@
 .vigil-indicators h4 {
   font-size: 14px;
   font-weight: 600;
-  color: #cbd5e1;
+  color: #F5F5F5;
   margin: 0 0 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -129,7 +129,7 @@
 .vigil-indicators ul {
   margin: 0;
   padding: 0 0 0 20px;
-  color: #94a3b8;
+  color: #A0A0A0;
   font-size: 14px;
   line-height: 1.6;
 }
@@ -164,30 +164,30 @@
 }
 
 .vigil-btn-primary {
-  background-color: #06b6d4; /* Cyan 500 */
+  background-color: #a35d41; /* Vigil Primary Dark */
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.2);
+  box-shadow: 0 4px 12px rgba(163, 93, 65, 0.2);
 }
 
 .vigil-btn-primary:hover {
-  background-color: #0891b2; /* Cyan 600 */
-  box-shadow: 0 6px 16px rgba(6, 182, 212, 0.3);
+  background-color: #c47657; /* Vigil Primary Hover Dark */
+  box-shadow: 0 6px 16px rgba(196, 118, 87, 0.3);
 }
 
 .vigil-btn-secondary {
   background-color: transparent;
-  color: #94a3b8;
-  border: 1px solid #334155;
+  color: #A0A0A0;
+  border: 1px solid #333333;
 }
 
 .vigil-btn-secondary:hover {
-  background-color: #1e293b;
-  color: #f8fafc;
+  background-color: #2A2A2A;
+  color: #F5F5F5;
 }
 
 .vigil-btn-outline {
   background-color: transparent;
-  color: #06b6d4;
+  color: #a35d41; /* Vigil Primary Dark */
 }
 
 .vigil-btn-outline:hover {

@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Setup View Report button
     if (scanData.id) {
       viewReportBtn.style.display = 'inline-block';
-      viewReportBtn.href = `http://localhost:5173/scan/${scanData.id}`;
+      viewReportBtn.href = `${config.DASHBOARD_URL}scan/${scanData.id}`;
       viewReportBtn.target = '_blank';
     } else {
       viewReportBtn.style.display = 'none';

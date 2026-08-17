@@ -73,7 +73,7 @@
       border-radius: 8px;
       padding: 16px;
       margin-bottom: 24px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
 
     .status-header {
@@ -107,6 +107,7 @@
     .action-btn {
       display: block;
       width: 100%;
+      box-sizing: border-box;
       padding: 12px;
       background-color: var(--color-primary);
       color: white;
@@ -189,16 +190,16 @@
     .file-input {
       padding: 8px;
     }
-    
+
     #result-container {
-      display: none; 
-      background-color: var(--color-surface); 
-      border: 1px solid var(--color-border); 
-      border-radius: 8px; 
-      padding: 16px; 
-      margin-bottom: 24px; 
+      display: none;
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 24px;
       text-align: center;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
   </style>
 </head>
@@ -228,9 +229,11 @@
   <div id="tab-email" class="tab-content">
     <form id="email-form" class="scan-form">
       <p style="font-size: 13px; color: #94a3b8; margin-top: 0; margin-bottom: 12px; line-height: 1.4;">
-        Tip: Press <strong>Ctrl+A</strong> and <strong>Ctrl+C</strong> in your email client to copy the entire email, then paste it below.
+        Tip: Press <strong>Ctrl+A</strong> and <strong>Ctrl+C</strong> in your email client to copy the entire email,
+        then paste it below.
       </p>
-      <textarea id="email-body" placeholder="Paste Email Content Here..." required class="form-input" rows="6" style="resize: none;"></textarea>
+      <textarea id="email-body" placeholder="Paste Email Content Here..." required class="form-input" rows="6"
+        style="resize: none;"></textarea>
       <button type="submit" id="scan-email-btn" class="action-btn">Scan Email</button>
     </form>
   </div>
@@ -248,11 +251,15 @@
 
   <div id="result-container">
     <div id="result-score" style="font-size: 32px; font-weight: 800; margin-bottom: 4px;">--/100</div>
-    <div id="result-severity" style="font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;">UNKNOWN</div>
+    <div id="result-severity"
+      style="font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;">
+      UNKNOWN</div>
     <a href="#" id="view-report-btn" class="action-btn" style="display: none; margin-top: 12px;">View Full Report</a>
   </div>
 
-  <a href="http://localhost:5173" target="_blank" id="dashboard-link" class="action-btn" style="background-color: transparent; border: 1px solid var(--color-border); color: var(--color-text-secondary);">Open Dashboard</a>
+  <a href="https://vigil-gold-kappa.vercel.app" target="_blank" id="dashboard-link" class="action-btn"
+    style="background-color: transparent; border: 1px solid var(--color-border); color: var(--color-text-secondary);">Open
+    Dashboard</a>
 
 
   <script type="module" src="popup.js"></script>

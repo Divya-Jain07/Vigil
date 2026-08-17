@@ -13,8 +13,7 @@ function showWarningOverlay(data) {
   }
 
   // Inject dashboard config URL since we can't easily import config.js as a module in a content script without extra setup
-  // We'll hardcode the localhost url for now, in a production setup this might be injected by the build process
-  const baseUrl = 'http://localhost:5173';
+  const baseUrl = 'https://vigil-gold-kappa.vercel.app';
   const reportUrl = data.id ? `${baseUrl}/scan/${data.id}` : baseUrl;
 
   // Create overlay container
