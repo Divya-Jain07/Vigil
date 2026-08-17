@@ -2,7 +2,7 @@ package com.vigil.analyzer.email;
 
 import com.vigil.dto.EmailScanRequest;
 import com.vigil.model.ThreatIndicator;
-import com.vigil.model.enums.ThreatLevel;
+import com.vigil.model.enums.Severity;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -37,17 +37,15 @@ public class EmailAuthenticationCheck implements EmailSecurityCheck {
                 if (dkimFail) reason.append("DKIM failed/missing. ");
                 if (dmarcFail) reason.append("DMARC failed/missing.");
                 
-                return Optional.of(new ThreatIndicator(
-                        "Email Authentication Failure",
-                        reason.toString().trim(),
-                        ThreatLevel.HIGH
-                ));
+                return Optional.of(ThreatIndicator.builder()
+                        .type("EMAIL_AUTH_FAILURE")
+                        .message(reason.toString().trim())
+                        .severity(Severity.HIGH)
+                        .score(50)
+                        .source("Local")
+                        .build());
             }
-        } else {
-             // Missing Authentication-Results header can also be suspicious, but might lead to false positives on internal emails.
-             // We'll skip for now.
         }
-
         return Optional.empty();
     }
 }

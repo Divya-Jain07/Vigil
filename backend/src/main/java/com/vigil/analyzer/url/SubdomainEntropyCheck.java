@@ -1,7 +1,7 @@
 package com.vigil.analyzer.url;
 
 import com.vigil.model.ThreatIndicator;
-import com.vigil.model.enums.ThreatLevel;
+import com.vigil.model.enums.Severity;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
@@ -37,16 +37,17 @@ public class SubdomainEntropyCheck implements UrlSecurityCheck {
                 if (!subdomain.isEmpty()) {
                     double entropy = calculateShannonEntropy(subdomain);
                     if (entropy > ENTROPY_THRESHOLD) {
-                        return Optional.of(new ThreatIndicator(
-                                "High Subdomain Entropy",
-                                "The subdomain string appears to be randomly generated (Entropy: " + String.format("%.2f", entropy) + "), which is characteristic of Algorithmically Generated Domains (DGA).",
-                                ThreatLevel.HIGH
-                        ));
+                        return Optional.of(ThreatIndicator.builder()
+                                .type("HIGH_SUBDOMAIN_ENTROPY")
+                                .message("The subdomain string appears to be randomly generated (Entropy: " + String.format("%.2f", entropy) + "), which is characteristic of Algorithmically Generated Domains (DGA).")
+                                .severity(Severity.HIGH)
+                                .score(75)
+                                .source("Local")
+                                .build());
                     }
                 }
             }
         } catch (URISyntaxException e) {
-            // Ignored for this check
         }
         return Optional.empty();
     }

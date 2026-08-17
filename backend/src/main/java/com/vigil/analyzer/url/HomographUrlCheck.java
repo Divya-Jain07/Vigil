@@ -1,7 +1,7 @@
 package com.vigil.analyzer.url;
 
 import com.vigil.model.ThreatIndicator;
-import com.vigil.model.enums.ThreatLevel;
+import com.vigil.model.enums.Severity;
 import org.springframework.stereotype.Component;
 
 import java.net.IDN;
@@ -23,14 +23,15 @@ public class HomographUrlCheck implements UrlSecurityCheck {
 
             String punycode = IDN.toASCII(host);
             if (punycode.startsWith("xn--") || punycode.contains(".xn--")) {
-                return Optional.of(new ThreatIndicator(
-                        "IDN Homograph Attack",
-                        "The URL domain uses Internationalized Domain Name (IDN) characters (Punycode: " + punycode + "), which is often used to visually spoof legitimate domains.",
-                        ThreatLevel.CRITICAL
-                ));
+                return Optional.of(ThreatIndicator.builder()
+                        .type("IDN_HOMOGRAPH_ATTACK")
+                        .message("The URL domain uses Internationalized Domain Name (IDN) characters (Punycode: " + punycode + "), which is often used to visually spoof legitimate domains.")
+                        .severity(Severity.CRITICAL)
+                        .score(90)
+                        .source("Local")
+                        .build());
             }
         } catch (URISyntaxException | IllegalArgumentException e) {
-            // Ignored for this check
         }
         return Optional.empty();
     }
