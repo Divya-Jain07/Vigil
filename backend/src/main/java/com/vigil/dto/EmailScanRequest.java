@@ -15,4 +15,6 @@ public class EmailScanRequest {
 
     @NotBlank(message = "Email body is required")
     private String body;
+    
+    private String rawHeaders; // Optional, for advanced checks like SPF/DKIM
 }

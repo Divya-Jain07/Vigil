@@ -14,4 +14,6 @@ public class PdfParseResult {
     private int pageCount;
     private String fileName;
     private List<PdfExtractedLink> extractedLinks;
+    private boolean hasJavaScript;
+    private boolean hasOpenAction;
 }

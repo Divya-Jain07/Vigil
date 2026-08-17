@@ -99,6 +99,18 @@ public class PdfParser {
                 if (info.getSubject() != null) metadata.put("Subject", info.getSubject());
             }
 
+            boolean hasJs = false;
+            boolean hasOpenAction = false;
+            
+            if (document.getDocumentCatalog() != null) {
+                if (document.getDocumentCatalog().getOpenAction() != null) {
+                    hasOpenAction = true;
+                }
+                if (document.getDocumentCatalog().getNames() != null && document.getDocumentCatalog().getNames().getJavaScript() != null) {
+                    hasJs = true;
+                }
+            }
+
             return PdfParseResult.builder()
                     .extractedText(text)
                     .extractedUrls(urls)
@@ -106,6 +118,8 @@ public class PdfParser {
                     .metadata(metadata)
                     .pageCount(document.getNumberOfPages())
                     .fileName(fileName)
+                    .hasJavaScript(hasJs)
+                    .hasOpenAction(hasOpenAction)
                     .build();
         }
     }

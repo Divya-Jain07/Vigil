@@ -80,8 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
           statusDesc.textContent = 'This page has been analyzed by Vigil.';
           displayResult(scanData);
         } else {
-          statusTitle.textContent = 'Active & Monitoring';
-          statusDesc.textContent = 'Vigil is active but no recent scan data is available for this specific page.';
+          statusTitle.textContent = 'Ready to Scan';
+          statusDesc.textContent = 'Click below to analyze the current webpage.';
           statusDot.style.backgroundColor = 'var(--color-primary)';
           statusDot.style.boxShadow = 'none';
           resultContainer.style.display = 'none';
@@ -92,6 +92,64 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initial check for URL tab
   checkUrlScanStatus();
+
+  // URL manual scan submission
+  document.getElementById('scan-url-btn').addEventListener('click', () => {
+    chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
+      if (!tabs || tabs.length === 0) return;
+      const activeTab = tabs[0];
+      const tabId = activeTab.id;
+      const url = activeTab.url;
+
+      if (!url || !url.startsWith('http')) {
+        alert('Cannot scan this type of page. Please open a valid webpage.');
+        return;
+      }
+
+      resultContainer.style.display = 'none';
+      loadingContainer.style.display = 'block';
+
+      try {
+        const { vigilToken } = await chrome.storage.local.get('vigilToken');
+        const headers = { 'Content-Type': 'application/json' };
+        if (vigilToken) {
+          headers['Authorization'] = `Bearer ${vigilToken}`;
+        }
+
+        const response = await fetch(`${config.API_BASE_URL}/scans/url`, {
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify({ url: url })
+        });
+
+        const result = await response.json();
+        if (result.success && result.data) {
+          // Cache the result for this tab
+          chrome.storage.local.set({ [`scan_${tabId}`]: result.data });
+          
+          statusTitle.textContent = 'Scan Complete';
+          statusDesc.textContent = 'This page has been analyzed by Vigil.';
+          displayResult(result.data);
+          
+          // Inject warning overlay if HIGH or CRITICAL
+          const severity = result.data.severity;
+          if (severity === 'HIGH' || severity === 'CRITICAL') {
+            chrome.tabs.sendMessage(tabId, {
+              action: 'show_warning',
+              data: result.data
+            }).catch(err => console.log('Could not inject overlay (page may not support it):', err));
+          }
+        } else {
+          alert('Failed to scan URL.');
+          loadingContainer.style.display = 'none';
+        }
+      } catch (error) {
+        console.error('URL scan error:', error);
+        alert('Error scanning URL.');
+        loadingContainer.style.display = 'none';
+      }
+    });
+  });
 
   // Email form submission
   document.getElementById('email-form').addEventListener('submit', async (e) => {

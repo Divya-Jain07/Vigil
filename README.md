@@ -42,7 +42,7 @@ These are the engineering highlights that separate Vigil from basic URL scanners
 
 | Feature | Implementation |
 |---|---|
-| 🛡️ **Real-Time Active Blocking** | A background Chrome Extension that intercepts navigation to dangerous sites and injects a custom warning overlay directly into the DOM. |
+| 🛡️ **On-Demand Page Scanning** | A Chrome Extension that allows users to manually scan any webpage they are visiting to instantly analyze it for hidden threats. |
 | 🧠 **AI Threat Translation** | Technical findings (like "suspicious heuristic match" or "obfuscated javascript") are translated by Gemini AI into user-friendly explanations. |
 | 📊 **Multi-Vector Scanning** | Support for parsing raw email headers/content and extracting metadata from PDF documents to catch embedded threats. |
 | 📈 **Custom Risk Scoring Algorithm** | A proprietary scoring system that weighs API flags, suspicious keywords, and heuristics to assign a confidence score (0-100) and severity level (SAFE to CRITICAL). |
@@ -53,8 +53,8 @@ These are the engineering highlights that separate Vigil from basic URL scanners
 ## ✨ Core Features & Modules
 
 ### 1. Web Threat Protection
-- **Automatic URL Analysis**: Scans links in real-time against VirusTotal and urlscan.io.
-- **Visual Warning Overlays**: Blocks interaction with malicious pages until explicitly bypassed.
+- **On-Demand URL Analysis**: Manually scan the URL you are currently visiting against VirusTotal and urlscan.io with a single click.
+- **Visual Warning Overlays**: Injects a massive warning overlay into the page if a scan returns a HIGH or CRITICAL risk.
 - **Safe Allowlisting**: Users can mark false positives to prevent future blocking.
 
 ### 2. Email Phishing Detection
