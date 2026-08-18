@@ -31,7 +31,7 @@ Vigil is a real-time cybersecurity tool that flags phishing and malicious URLs i
 
 Vigil utilizes a 3-tier system with a Chrome Extension for real-time interception, a React frontend for detailed analytics, and a Spring Boot backend orchestrating AI and Threat Intelligence APIs.
 
-👉 [View the detailed Architecture Diagram in ARCHITECTURE.md](docs\architecture.md)
+👉 [View the detailed Architecture Diagram in ARCHITECTURE.md](docs/architecture.md)
 
 ---
 
@@ -112,9 +112,9 @@ Create a `.env` file in the `backend/` root directory (refer to `.env.example` i
 ## 📚 Documentation
 
 For deep dives into specific areas, check out our documentation:
-- [API Documentation](docs\api_documentation.md)
-- [System Architecture](docs\architecture.md)
-- [Testing Guide](docs\testing.md)
+- [API Documentation](docs/api_documentation.md)
+- [System Architecture](docs/architecture.md)
+- [Testing Guide](docs/testing.md)
 
 ---
 
