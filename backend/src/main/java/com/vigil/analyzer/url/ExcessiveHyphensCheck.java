@@ -32,7 +32,7 @@ public class ExcessiveHyphensCheck implements UrlSecurityCheck {
                     return Optional.of(ThreatIndicator.builder()
                             .type("EXCESSIVE_HYPHENS")
                             .severity(Severity.LOW)
-                            .score(15) // Moderate score for phishing attempt
+                            .score(10) // Moderate score for phishing attempt
                             .message("The domain contains an excessive number of hyphens (" + hyphenCount + "), which is common in phishing URLs.")
                             .source("Local")
                             .build());

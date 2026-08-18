@@ -13,19 +13,18 @@ import java.util.Optional;
 @Component
 public class SubdomainEntropyCheck implements UrlSecurityCheck {
 
-    // Threshold for Shannon entropy. Domains with high entropy look like random strings (e.g. DGA).
     private static final double ENTROPY_THRESHOLD = 4.0;
 
     @Override
     public Optional<ThreatIndicator> analyze(String url) {
         try {
-            URI uri = new URI(url);
+            String urlToParse = url.startsWith("http") ? url : "http://" + url;
+            URI uri = new URI(urlToParse);
             String host = uri.getHost();
             if (host == null) {
                 return Optional.empty();
             }
 
-            // Extract subdomain (everything before the last two parts)
             String[] parts = host.split("\\.");
             if (parts.length > 2) {
                 StringBuilder subdomainBuilder = new StringBuilder();
@@ -41,13 +40,14 @@ public class SubdomainEntropyCheck implements UrlSecurityCheck {
                                 .type("HIGH_SUBDOMAIN_ENTROPY")
                                 .message("The subdomain string appears to be randomly generated (Entropy: " + String.format("%.2f", entropy) + "), which is characteristic of Algorithmically Generated Domains (DGA).")
                                 .severity(Severity.HIGH)
-                                .score(75)
+                                .score(25)
                                 .source("Local")
                                 .build());
                     }
                 }
             }
         } catch (URISyntaxException e) {
+            // Skip
         }
         return Optional.empty();
     }

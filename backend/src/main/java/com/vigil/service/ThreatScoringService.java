@@ -18,9 +18,22 @@ public class ThreatScoringService {
                     .build();
         }
 
+        // Check for Critical Trigger Overrides
+        boolean hasCriticalVt = indicators.stream()
+                .anyMatch(i -> "VirusTotal".equalsIgnoreCase(i.getSource()) && (i.getSeverity() == Severity.HIGH || i.getSeverity() == Severity.CRITICAL));
+                
+        boolean hasNewDomain = indicators.stream().anyMatch(i -> "NEW_DOMAIN".equalsIgnoreCase(i.getType()));
+        boolean hasHighEntropy = indicators.stream().anyMatch(i -> "HIGH_SUBDOMAIN_ENTROPY".equalsIgnoreCase(i.getType()));
+        
+        boolean criticalOverride = hasCriticalVt || (hasNewDomain && hasHighEntropy);
+
         int totalScore = indicators.stream()
                 .mapToInt(ThreatIndicator::getScore)
                 .sum();
+                
+        if (criticalOverride) {
+            totalScore = Math.max(totalScore, 85); // Force floor to 85 (Critical)
+        }
                 
         int cappedScore = Math.min(totalScore, 100);
 

@@ -9,17 +9,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Orchestrates the full URL analysis pipeline:
- * 1. Local deterministic security checks (HTTPS, TLD, URL length, IP, etc.)
- * 2. External threat intelligence (VirusTotal, URLScan.io, RDAP)
- *
- * External failures are gracefully handled — local results are always returned
- * even if external services are unavailable.
+ * Orchestrates the full URL analysis pipeline.
  */
 @Slf4j
 @Service
@@ -31,10 +27,21 @@ public class UrlAnalysisService {
     private final UrlScanClient urlScanClient;
     private final RdapClient rdapClient;
 
+    private static final List<String> WHITELISTED_DOMAINS = List.of(
+            "microsoft.com", "microsoftonline.com", "apple.com", "paypal.com",
+            "amazon.com", "google.com", "github.com"
+    );
+
     public List<ThreatIndicator> analyzeUrl(String url) {
         List<ThreatIndicator> indicators = new ArrayList<>();
+        
+        // Step 1: Whitelist Check
+        if (isWhitelisted(url)) {
+            log.info("URL {} is whitelisted. Skipping further checks.", url);
+            return indicators; // Return empty, meaning 0 score/safe
+        }
 
-        // Phase 1: Local deterministic checks
+        // Phase 1: Local deterministic checks (Step 2 & 3)
         log.info("Running local security checks for URL: {}", url);
         securityChecks.stream()
                 .map(check -> check.analyze(url))
@@ -51,6 +58,26 @@ public class UrlAnalysisService {
         log.info("External checks complete. Total indicators: {}", indicators.size());
 
         return indicators;
+    }
+    
+    private boolean isWhitelisted(String url) {
+        if (url == null || url.isBlank()) return false;
+        try {
+            String urlToParse = url.startsWith("http") ? url : "http://" + url;
+            URI uri = new URI(urlToParse);
+            String host = uri.getHost();
+            if (host == null) return false;
+            
+            // Use Guava's InternetDomainName to accurately extract the top private domain (eTLD+1)
+            // This prevents subdomain hijacking (e.g., google.com.attacker.com)
+            com.google.common.net.InternetDomainName domainName = com.google.common.net.InternetDomainName.from(host);
+            if (!domainName.isUnderPublicSuffix()) return false;
+            
+            String topPrivate = domainName.topPrivateDomain().toString();
+            return WHITELISTED_DOMAINS.contains(topPrivate);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private void addIfPresent(List<ThreatIndicator> list, Optional<ThreatIndicator> indicator, String source) {

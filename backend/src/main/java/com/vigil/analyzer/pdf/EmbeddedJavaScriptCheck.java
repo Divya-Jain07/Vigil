@@ -10,7 +10,7 @@ import java.util.Optional;
 public class EmbeddedJavaScriptCheck implements PdfSecurityCheck {
 
     @Override
-    public Optional<ThreatIndicator> check(PdfParseResult result) {
+    public Optional<ThreatIndicator> analyze(PdfParseResult result) {
         if (result.isHasJavaScript()) {
             return Optional.of(ThreatIndicator.builder()
                     .type("EMBEDDED_JAVASCRIPT")

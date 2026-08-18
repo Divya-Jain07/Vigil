@@ -19,10 +19,8 @@ import java.util.stream.Collectors;
 public class SuspiciousKeywordCheck implements UrlSecurityCheck {
 
     private static final List<String> SUSPICIOUS_KEYWORDS = List.of(
-            "login", "signin", "sign-in", "secure", "security",
-            "account", "verify", "verification", "confirm", "update",
-            "banking", "paypal", "amazon", "apple", "microsoft",
-            "password", "credential", "authenticate", "support"
+            "login.php", "account-update", "verify", "secure", "security",
+            "account", "verification", "confirm", "update", "credential", "authenticate"
     );
 
     @Override
@@ -34,35 +32,34 @@ public class SuspiciousKeywordCheck implements UrlSecurityCheck {
         try {
             String urlToParse = url.startsWith("http") ? url : "http://" + url;
             URI uri = new URI(urlToParse);
-            String host = uri.getHost();
+            String path = uri.getPath();
+            String query = uri.getQuery();
+            
+            String pathAndQuery = (path != null ? path : "") + (query != null ? query : "");
+            
+            if (pathAndQuery.isEmpty()) {
+                return Optional.empty();
+            }
 
-            if (host == null) return Optional.empty();
-
-            // For testing purposes and better coverage, check the entire URL string (excluding query params if we want, but let's check the whole thing)
-            String urlLower = urlToParse.toLowerCase();
+            String pathLower = pathAndQuery.toLowerCase();
 
             List<String> matched = SUSPICIOUS_KEYWORDS.stream()
-                    .filter(urlLower::contains)
+                    .filter(pathLower::contains)
                     .collect(Collectors.toList());
 
             if (!matched.isEmpty()) {
-                int score = Math.min(matched.size() * 10, 40); // cap at 40
-                Severity severity = matched.size() >= 3 ? Severity.HIGH
-                        : matched.size() == 2 ? Severity.MEDIUM
-                        : Severity.LOW;
-
                 return Optional.of(ThreatIndicator.builder()
-                        .type("SUSPICIOUS_KEYWORDS_IN_DOMAIN")
-                        .severity(severity)
-                        .score(score)
-                        .message("The domain contains suspicious keywords often used in phishing sites: "
-                                + String.join(", ", matched) + ". Legitimate brands do not embed these words in their domain.")
+                        .type("SUSPICIOUS_KEYWORDS_IN_PATH")
+                        .severity(Severity.LOW)
+                        .score(15)
+                        .message("The URL path contains suspicious keywords: "
+                                + String.join(", ", matched) + ". This often directs users to credential harvesting pages.")
                         .source("Local")
                         .build());
             }
 
         } catch (URISyntaxException e) {
-            // Malformed URL — skip check silently
+            // Malformed URL
         }
 
         return Optional.empty();

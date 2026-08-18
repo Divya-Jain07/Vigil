@@ -25,7 +25,7 @@ public class IpAddressInUrlCheck implements UrlSecurityCheck {
                 return Optional.of(ThreatIndicator.builder()
                         .type("IP_ADDRESS_URL")
                         .severity(Severity.MEDIUM)
-                        .score(40)
+                        .score(35)
                         .message("The URL uses an IP address instead of a domain name.")
                         .source("Local")
                         .build());

@@ -10,7 +10,7 @@ import java.util.Optional;
 public class AutoLaunchCheck implements PdfSecurityCheck {
 
     @Override
-    public Optional<ThreatIndicator> check(PdfParseResult result) {
+    public Optional<ThreatIndicator> analyze(PdfParseResult result) {
         if (result.isHasOpenAction()) {
             return Optional.of(ThreatIndicator.builder()
                     .type("AUTO_LAUNCH_ACTION")
