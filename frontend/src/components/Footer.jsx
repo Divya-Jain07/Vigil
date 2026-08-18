@@ -45,9 +45,9 @@ const Footer = () => {
             {/* <a href="#" className="footer-link"><Mail size={16} /> Contact</a> */}
           </div>
 
-          <div className="footer-copy">
+          {/* <div className="footer-copy">
             Vigil
-          </div>
+          </div> */}
         </div>
       </footer>
 

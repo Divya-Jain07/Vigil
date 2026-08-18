@@ -18,7 +18,7 @@ cd backend
 The backend contains a specific `application.properties` file located in `src/test/resources/` that configures tests to use a local or in-memory MongoDB database to avoid polluting the production/development database.
 
 ### Key Areas to Test
-1. **ThreatScoringService**: This is the most critical component. Write unit tests to ensure that different combinations of VirusTotal hits and Suspicious Keywords result in the correct severity (SAFE vs RISK).
+1. **ThreatScoringService**: This is the most critical component. Write unit tests to ensure that different combinations of VirusTotal hits and Suspicious Keywords result in the correct severity (LOW, MEDIUM, HIGH, CRITICAL).
 2. **Controllers**: Ensure endpoints return correct HTTP status codes (200, 400, 401, 403) based on authentication states and input validation.
 
 ## Frontend Testing (React)

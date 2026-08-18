@@ -14,12 +14,11 @@ The Vigil Backend exposes a RESTful API. All endpoints (except public authentica
 - **Body (JSON)**:
   ```json
   {
-    "name": "John Doe",
-    "email": "john@example.com",
+    "email": "divya@example.com",
     "password": "securepassword123"
   }
   ```
-- **Response**: `200 OK` (Returns JWT token and user info).
+- **Response**: `200 OK` (Returns success status, JWT token, and message).
 
 ### 2. Login
 - **Endpoint**: `POST /api/v1/auth/login`
@@ -27,7 +26,7 @@ The Vigil Backend exposes a RESTful API. All endpoints (except public authentica
 - **Body (JSON)**:
   ```json
   {
-    "email": "john@example.com",
+    "email": "divya@example.com",
     "password": "securepassword123"
   }
   ```
@@ -65,10 +64,13 @@ The Vigil Backend exposes a RESTful API. All endpoints (except public authentica
   ```json
   {
     "sender": "admin@paypal-security-update.com",
+    "replyTo": "scammer@random-domain.com",
     "subject": "Urgent: Account Suspended",
-    "body": "Click here to verify your account..."
+    "body": "Click here to verify your account...",
+    "rawHeaders": "Received: from ...\nDKIM-Signature: ..."
   }
   ```
+  *(Note: `replyTo` and `rawHeaders` are optional but heavily utilized by internal checks like SPF/DKIM verification and mismatch analysis).*
 
 ### 3. Scan PDF
 - **Endpoint**: `POST /api/v1/scans/pdf`
@@ -79,7 +81,7 @@ The Vigil Backend exposes a RESTful API. All endpoints (except public authentica
 
 ### 4. Get Scan by ID
 - **Endpoint**: `GET /api/v1/scans/{id}`
-- **Description**: Retrieves a specific scan result by its MongoDB ID. Publicly accessible to allow sharing reports.
+- **Description**: Retrieves a specific scan result by its MongoDB ID. Publicly accessible only for anonymous scans (no `userId`) to allow sharing reports; returns `403 Forbidden` if the scan belongs to a different logged-in user.
 
 ### 5. Get User History
 - **Endpoint**: `GET /api/v1/scans`
